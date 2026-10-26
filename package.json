@@ -1,0 +1,38 @@
+{
+  "name": "knock-reminder",
+  "version": "0.1.0",
+  "description": "敲屏提醒小助手:选一个形象,到点了它会敲你的屏幕提醒喝水、提肛、起身",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.jsp.knockreminder",
+    "productName": "敲屏提醒",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  }
+}

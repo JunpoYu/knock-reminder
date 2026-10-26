@@ -1,0 +1,211 @@
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  cursor: default;
+}
+
+#dim {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 80%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.55));
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+body.dim #dim { opacity: 1; }
+
+#shaker { position: fixed; inset: 0; }
+#shaker.shake { animation: shake 0.32s cubic-bezier(.36, .07, .19, .97); }
+#shaker.shake-heavy { animation: shake-heavy 0.46s cubic-bezier(.2, .6, .3, 1); }
+@keyframes shake-heavy {
+  0% { transform: translate(0, 0) scale(1); }
+  8% { transform: translate(-26px, 16px) rotate(-1.2deg) scale(1.015); }
+  18% { transform: translate(22px, -18px) rotate(1deg); }
+  30% { transform: translate(-16px, 12px) rotate(-0.7deg); }
+  44% { transform: translate(11px, -8px) rotate(0.4deg); }
+  60% { transform: translate(-6px, 4px); }
+  78% { transform: translate(3px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  15% { transform: translate(-14px, 8px) rotate(-0.6deg); }
+  30% { transform: translate(12px, -10px) rotate(0.5deg); }
+  45% { transform: translate(-9px, 6px) rotate(-0.3deg); }
+  60% { transform: translate(7px, -4px) rotate(0.2deg); }
+  80% { transform: translate(-3px, 2px); }
+}
+
+#cracks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: opacity 0.35s;
+}
+#cracks .crack {
+  transform-box: view-box;
+  animation: crack-in 0.14s ease-out;
+}
+@keyframes crack-in {
+  from { transform: scale(0.35); opacity: 0.2; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#stage {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 3vw;
+}
+
+#buddy {
+  position: relative;
+  pointer-events: none; /* 拳头砸出来时别挡住按钮 */
+  margin-bottom: -5vh; /* 像是从屏幕下沿探出头来 */
+}
+#figure {
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+}
+#figure svg {
+  display: block;
+  height: 62vh;
+  width: auto;
+  overflow: visible;
+}
+#figure img {
+  display: block;
+  height: 40vh;
+  max-width: 50vw;
+  object-fit: contain;
+}
+/* 精灵图画在 canvas 上;四周羽化一下,遮住拳头和碎玻璃被格子边缘截断的硬边 */
+#figure.sprite { transform-origin: 40% 60%; }
+#figure.sprite canvas {
+  display: block;
+  height: min(72vh, 52vw);
+  aspect-ratio: 1;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 4%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 4%);
+  mask-composite: intersect;
+}
+
+#bubble {
+  position: relative;
+  flex: none;
+  width: max-content;
+  min-width: 340px;
+  max-width: min(560px, 45vw);
+  margin-bottom: 16vh;
+  padding: 26px 32px 20px;
+  border-radius: 26px;
+  background: #fffaf2;
+  color: #2b2118;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4), 0 0 0 4px #ff8a3d;
+  text-align: center;
+  transform-origin: 0 100%;
+  transition: transform 0.35s cubic-bezier(.34, 1.56, .64, 1), opacity 0.25s;
+}
+/* 左下角两个小圆点,指向形象 */
+#bubble::before,
+#bubble::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: #fffaf2;
+  box-shadow: 0 0 0 4px #ff8a3d;
+}
+#bubble::before { left: -30px; bottom: -14px; width: 26px; height: 26px; }
+#bubble::after { left: -56px; bottom: -40px; width: 14px; height: 14px; }
+#bubble.hidden { transform: scale(0.4); opacity: 0; pointer-events: none; }
+
+#title {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ff6a1a;
+}
+#message {
+  margin-top: 8px;
+  font-size: 22px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+#message:empty { display: none; }
+
+#actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+#actions button {
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px 26px;
+  border-radius: 999px;
+  border: 2px solid #e8d8c6;
+  background: #fff;
+  color: #6b5a4b;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.15s;
+}
+#actions button:hover { background: #fff2e4; }
+#actions button:active { transform: scale(0.95); }
+#actions button.primary {
+  background: #ff8a3d;
+  border-color: #ff8a3d;
+  color: #fff;
+}
+#actions button.primary:hover { background: #ff7a24; }
+
+#countdown {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #a8968a;
+}
+#countdown:empty { display: none; }
+
+#bangs { position: absolute; inset: 0; pointer-events: none; }
+.bang {
+  position: absolute;
+  font-size: 64px;
+  font-weight: 900;
+  color: #fff;
+  -webkit-text-stroke: 3px #ff5a1a;
+  paint-order: stroke fill;
+  text-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  animation: bang 0.8s ease-out forwards;
+}
+@keyframes bang {
+  0% { transform: translate(-50%, -50%) scale(0.4) rotate(var(--r)); opacity: 1; }
+  25% { transform: translate(-50%, -80%) scale(1.15) rotate(var(--r)); opacity: 1; }
+  100% { transform: translate(-50%, -160%) scale(1) rotate(var(--r)); opacity: 0; }
+}
+
+body.leaving #cracks,
+body.leaving #flash,
+body.leaving #bangs { opacity: 0; }
+body.leaving #dim { opacity: 0; }
+body.leaving #bubble { transform: scale(0.6); opacity: 0; }

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+  <div id="dim"></div>
+  <div id="shaker">
+    <div id="stage">
+      <div id="buddy">
+        <div id="figure"></div>
+      </div>
+      <div id="bubble" class="hidden">
+        <div id="title"></div>
+        <div id="message"></div>
+        <div id="actions">
+          <button id="done" class="primary">搞定 ✓</button>
+          <button id="snooze"></button>
+        </div>
+        <div id="countdown"></div>
+      </div>
+    </div>
+    <!-- 玻璃在形象和人之间,所以裂纹、闪光盖在形象上面 -->
+    <svg id="cracks" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="flash"></div>
+    <div id="bangs"></div>
+  </div>
+  <script src="overlay.js"></script>
+</body>
+</html>
